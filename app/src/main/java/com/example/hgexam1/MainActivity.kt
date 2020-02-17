@@ -8,17 +8,18 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
-    var nameArray = arrayOf("아이유", "신봉선", "이지은")
-    var productArray = arrayOf(
+    val nameArray = arrayOf("아이유", "신봉선", "이지은")
+    val productArray = arrayOf(
         ProductModel("김치찌개", 7000),
         ProductModel("삼겹살", 13000),
         ProductModel("계란찜", 3000)
-        )
-
-
+    )
+    val numberList = mutableListOf<Int>()
 
     //CheckBox 통해 글씨 모양 변경하는 eventListener
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -34,13 +35,25 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //adapter 생
-        var nameAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nameArray)
-        var productAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, productArray)
+        //adapter 생성
+        val nameAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nameArray)
+        val productAdapter =
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, productArray)
+        val numberAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, numberList)
 
         //Spinner에 adapter등록
         nameOption.adapter = nameAdapter
         productOption.adapter = productAdapter
+        numberOption.adapter = numberAdapter
+
+        //Spinner에서 숫자 선택 시 문구 변경하는 eventListener 등록
+        changeNumber()
+
+        //숫자 추가 버튼에 숫자 랜덤 추가하는 eventListener 등록
+        addNumber(numberAdapter)
+
+        //숫자 삭제 버튼에 숫자 삭제하는 eventListener 등록
+        removeNumber(numberAdapter)
 
         //Spinner에서 제품 선택 시 가격 변경하는 eventListener 등록
         changeProductPrice()
@@ -65,6 +78,41 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         //Text의 색깔 변경하는 eventListener 등록
         changeTextColor()
+    }
+
+    private fun removeNumber(numberAdapter: ArrayAdapter<Int>) {
+        removeButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                numberList.removeAt(numberList.lastIndex)
+                numberAdapter.notifyDataSetChanged()
+            }
+        })
+    }
+
+    private fun addNumber(numberAdapter: ArrayAdapter<Int>) {
+        addButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                numberList.add(Random.nextInt(0..100))
+                numberAdapter.notifyDataSetChanged()
+            }
+        })
+    }
+
+    private fun changeNumber() {
+        numberOption.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                notifyText.text = "${numberList[position]}번을 선택하셨습니다."
+            }
+        }
     }
 
     private fun changeProductPrice() {
