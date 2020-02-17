@@ -33,4 +33,26 @@
         android:text="인사하기"
         app:layout_constraintTop_toBottomOf="@+id/nameEdit"
         tools:layout_editor_absoluteX="16dp" />
+
+    <ImageView
+        android:id="@+id/photoView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="64dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/iu1" />
+
+    <Button
+        android:id="@+id/scaleTypeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="스케일링 변경"
+        app:layout_constraintEnd_toEndOf="@+id/photoView"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="@+id/photoView"
+        app:layout_constraintTop_toBottomOf="@+id/photoView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
