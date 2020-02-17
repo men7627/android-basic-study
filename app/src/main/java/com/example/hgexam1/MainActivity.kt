@@ -12,9 +12,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
 
     var nameArray = arrayOf("아이유", "신봉선", "이지은")
+    var productArray = arrayOf(
+        ProductModel("김치찌개", 7000),
+        ProductModel("삼겹살", 13000),
+        ProductModel("계란찜", 3000)
+        )
 
-    //위 배열을 spinner에 표시할 ArrayAdapter변수
-    var adapter: ArrayAdapter<String>? = null
+
 
     //CheckBox 통해 글씨 모양 변경하는 eventListener
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
@@ -30,13 +34,18 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //adapter초기화
-        adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nameArray)
+        //adapter 생
+        var nameAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, nameArray)
+        var productAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, productArray)
 
         //Spinner에 adapter등록
-        nameOption.adapter = adapter
+        nameOption.adapter = nameAdapter
+        productOption.adapter = productAdapter
 
-        //Spinner에서 이름 선택 시 문구 변경하는 eventListener 등
+        //Spinner에서 제품 선택 시 가격 변경하는 eventListener 등록
+        changeProductPrice()
+
+        //Spinner에서 이름 선택 시 문구 변경하는 eventListener 등록
         changeHelloText()
 
         //이름 입력 시 text값 변경하는 eventListener등록
@@ -56,6 +65,24 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         //Text의 색깔 변경하는 eventListener 등록
         changeTextColor()
+    }
+
+    private fun changeProductPrice() {
+        productOption.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                priceText.text = productArray[position].let { "${it.name}의 가격은 ${it.price}입니다!" }
+            }
+
+        }
     }
 
     private fun changeHelloText() {
